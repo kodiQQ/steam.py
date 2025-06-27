@@ -429,7 +429,13 @@ class ConnectionState:
                             if clan_invitees is None:
                                 clan_invitees = await self.http.get_clan_invitees()
 
-                            invitee = await self._maybe_user(clan_invitees[id.id64])
+                            # invitee = await self._maybe_user(clan_invitees[id.id64])
+                            user_id = clan_invitees.get(id.id64)
+                            
+                            if user_id is None:  # brak rekordu ➜ pomijamy to zaproszenie
+                                
+                                continue
+                            invitee = await self._maybe_user(user_id)
                             try:
                                 clan = await self.fetch_clan(id.id64)
                             except WSException:
